@@ -83,10 +83,10 @@ streamlit run website_analyse.py
 
 ## Структура проекта
 
-* website_analyse.py — основной файл веб-интерфейса Streamlit, NLP-инференс и отрисовку графиков.
-* analysis.py — файл с кодом, отвечающий за логику приложения. 
-* another_scrapper.py — скрипт парсера, использующий Playwright и BeautifulSoup для извлечения данных с сайтов.
-* requirements.txt — файл со списком всех внешних библиотек и зависимостей проекта.
+* website_analyse.py - основной файл веб-интерфейса Streamlit, NLP-инференс и отрисовку графиков.
+* analysis.py - файл с кодом, отвечающий за логику приложения. 
+* another_scrapper.py - скрипт парсера, использующий Playwright и BeautifulSoup для извлечения данных с сайтов.
+* requirements.txt - файл со списком всех внешних библиотек и зависимостей проекта.
 
 ## Модель
 
