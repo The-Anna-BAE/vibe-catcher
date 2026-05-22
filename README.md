@@ -34,7 +34,7 @@
 1. Клонируйте репозиторий:
 
 
-git clone https://github.com/The-Anna-BAE/vibe-catcher.git
+git clone https://github.com/The-Anna-BAE/vibe-catcher.git  
 cd vibe-catcher
 
 
