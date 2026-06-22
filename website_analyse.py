@@ -34,7 +34,6 @@ import nltk
 
 import asyncio
 
-
 model_name = "cointegrated/rubert-tiny-sentiment-balanced"
 model = pipeline("sentiment-analysis", model=model_name)
 
@@ -94,14 +93,29 @@ if st.button("Рассчитать и вывести аналитику"):
 
             sorted_review_table.columns=['Негативные','Нейтральные','Позитивные']
             sorted_lemmatized_review_table.columns=['Негативные','Нейтральные','Позитивные']
-            
+            morph = MorphAnalyzer()
+
+
+            # sorted_lemmatized_review_table["количество упоминаний"] = sorted_lemmatized_review_table.apply(analysis.get_nouns)
+
+            # sorted_lemmatized_review_table["Негативные"] = sorted_lemmatized_review_table.apply(analysis.get_nouns)
+
+
             sorted_review_table.to_csv(index=False, path_or_buf='result.csv')
             
-            flattend_positive = sorted_lemmatized_review_table['Позитивные'].str.split().explode().value_counts()
-            most_common_words_positive=flattend_positive.head(10)
+            flattend_positive = sorted_lemmatized_review_table['Позитивные'].dropna().str.split().explode().value_counts().reset_index()
+            flattend_positive.columns = ["слово","количество упоминаний"]
+            flattend_positive["часть речи"] = flattend_positive["слово"].apply(analysis.get_nouns)
 
-            flattend_negative = sorted_lemmatized_review_table['Негативные'].str.split().explode().value_counts()
-            most_common_words_negative=flattend_negative.head(10)
+
+            most_common_words_positive=flattend_positive[flattend_positive["часть речи"]=='NOUN'].head(10)
+
+            flattend_negative = sorted_lemmatized_review_table['Негативные'].dropna().str.split().explode().value_counts().reset_index()
+            flattend_negative.columns = ["слово","количество упоминаний"]
+            flattend_negative["часть речи"] = flattend_negative["слово"].apply(analysis.get_nouns)
+
+
+            most_common_words_negative=flattend_negative[flattend_negative["часть речи"]=="NOUN"].head(10)
 
             counts = sorted_review_table.count()
             counts = counts.reset_index()
@@ -119,11 +133,11 @@ if st.button("Рассчитать и вывести аналитику"):
             
             with col1:
                 st.subheader('позитивных отзывов')
-                df1 = pd.DataFrame(most_common_words_positive.items(), columns=['слово', 'количество упоминаний'])
+                df1 = most_common_words_positive[['слово', 'количество упоминаний']]
                 st.dataframe(df1,hide_index=True)
             with col2:
                 st.subheader('негативных отзывов')
-                df2 = pd.DataFrame(most_common_words_negative.items(), columns=['слово', 'количество упоминаний'])
+                df2 = most_common_words_negative[['слово', 'количество упоминаний']]
                 st.dataframe(df2,hide_index=True)
             fig = px.pie(counts,
                             names='Оценка отзыва',

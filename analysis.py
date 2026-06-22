@@ -82,3 +82,12 @@ def prepare_table(res,lines,lines_b4):
     df1 = pd.DataFrame({i: pd.Series(text) for i,text in d1.items()})
     df2 = pd.DataFrame({i: pd.Series(text) for i,text in d2.items()})
     return df1,df2
+def get_nouns(word):
+    if pd.isna(word) or not word:
+        return None
+    word =str(word).strip().lower()
+    if word =='nan':
+        return None
+    
+    good_ones = morph.parse(str(word))[0]
+    return good_ones.tag.POS
